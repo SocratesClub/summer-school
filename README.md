@@ -2,8 +2,8 @@
 
 ## 20190701
 
-- [Understanding neural networks with Pytorch](https://nbviewer.jupyter.org/github/computational-class/summer-school/blob/master/class_01_chengjun.ipynb)
-- [Intro of word embeddings](https://nbviewer.jupyter.org/github/computational-class/bigdata/blob/gh-pages/code/10.word2vec.ipynb)
+1. [Understanding neural networks with Pytorch](https://nbviewer.jupyter.org/github/computational-class/summer-school/blob/master/class_01_chengjun.ipynb)
+1. [Intro of word embeddings](https://nbviewer.jupyter.org/github/computational-class/bigdata/blob/gh-pages/code/10.word2vec.ipynb)
 
 ## 20190702
 
