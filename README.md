@@ -12,11 +12,19 @@
 
 ## 20190703
 
-1. RNN & CNN
-
+1. [RNN](https://nbviewer.jupyter.org/github/computational-class/summer-school/blob/master/RNN_example.ipynb) & CNN
+2. discussing research topics
 
 
 # 参考文献
-
-- https://www.cnblogs.com/lliuye/p/9451903.html 几种梯度下降方法介绍
+## day 1
+- 几种梯度下降方法介绍 https://www.cnblogs.com/lliuye/p/9451903.html
 - 如何在网络很差的情况下安装pytorch？https://www.douban.com/note/724529188/
+
+## day 2
+- Mikolov et al. (2013). Efficient Estimation of Word Representations in Vector Space
+- Mikolov et al. (2013). Distributed representations of words and phrases and their compositionality
+
+## day 3
+- Caliskan, A., Bryson, J. J. and Narayanan, A. (2017) Semantics derived automatically from language corpora contain human-like biases. Science, 356 (6334). pp. 183-186. ISSN 0036-8075
+- The Geometry of Culture: Analyzing Meaning through Class through Word Embeddings. Austin C. Kozlowski, Matt Taddy, James A. Evans
