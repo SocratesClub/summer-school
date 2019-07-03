@@ -9,17 +9,22 @@
 
 1. word2vec examples with sequential numbers
 2. discussing research topics
+  - Douban research, Zhengyi Liang
 
 ## 20190703
 
-1. [RNN](https://nbviewer.jupyter.org/github/computational-class/summer-school/blob/master/RNN_example.ipynb) & CNN
+1. [RNN](https://nbviewer.jupyter.org/github/computational-class/summer-school/blob/master/class_03_RNN_example.ipynb) & CNN
 2. discussing research topics
+  - The shape of story, Huimin Xu
 
 
 # 参考文献
 ## day 1
-- 几种梯度下降方法介绍 https://www.cnblogs.com/lliuye/p/9451903.html
-- 如何在网络很差的情况下安装pytorch？https://www.douban.com/note/724529188/
+- The book of [Deep Learning](https://www.deeplearningbook.org)
+  - [Chapter 1](https://www.deeplearningbook.org/contents/intro.html)
+- [几种梯度下降方法介绍](https://www.cnblogs.com/lliuye/p/9451903.html)
+- [如何在网络很差的情况下安装pytorch？](https://www.douban.com/note/724529188/)
+
 
 ## day 2
 - Mikolov et al. (2013). Efficient Estimation of Word Representations in Vector Space
