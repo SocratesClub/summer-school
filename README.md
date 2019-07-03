@@ -16,6 +16,9 @@
 1. [RNN](https://nbviewer.jupyter.org/github/computational-class/summer-school/blob/master/class_03_RNN_example.ipynb) & CNN
 2. discussing research topics
   - The shape of story, Huimin Xu
+  - cultrual dimension
+  - Using [svd method](https://www.deeplearningbook.org/contents/linear_algebra.html) finding the main diension.
+  - deepwalk, network embeddings.
 
 
 # 参考文献
@@ -31,5 +34,8 @@
 - Mikolov et al. (2013). Distributed representations of words and phrases and their compositionality
 
 ## day 3
-- Caliskan, A., Bryson, J. J. and Narayanan, A. (2017) Semantics derived automatically from language corpora contain human-like biases. Science, 356 (6334). pp. 183-186. ISSN 0036-8075
-- The Geometry of Culture: Analyzing Meaning through Class through Word Embeddings. Austin C. Kozlowski, Matt Taddy, James A. Evans
+- Semantics derived automatically from language corpora contain human-like biases. Caliskan, A., Bryson, J. J. and Narayanan, A. (2017). Science, 356 (6334). pp. 183-186. ISSN 0036-8075
+- The Geometry of Culture: Analyzing Meaning through Class through Word Embeddings. Austin C. Kozlowski, Matt Taddy, James A. Evans. AJS.
+- Word embeddings quantify 100 years of gender and ethnic stereotypes, Nikhil Garga, Londa Schiebinger, Dan Jurafsky, and James Zou. 2017. Pnas.
+- The product space conditions the development of nations. Hidago, 2007, Science.
+- The book of Deep Learning, Chapter 2. [svd method](https://www.deeplearningbook.org/contents/linear_algebra.html)
