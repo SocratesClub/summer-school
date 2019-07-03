@@ -7,6 +7,13 @@
 
 ## 20190702
 
+1. word2vec examples with sequential numbers
+2. discussing research topics
+
+## 20190703
+
+1. RNN & CNN
+
 
 
 # 参考文献
