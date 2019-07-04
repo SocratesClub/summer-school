@@ -19,6 +19,9 @@
   - cultrual dimension
   - Using [svd method](https://www.deeplearningbook.org/contents/linear_algebra.html) finding the main diension.
   - deepwalk, network embeddings.
+## 20190704
+1. CNN
+2. discussing the applications of deep learning methods & eci method of hidalgo's research.
 
 
 # 参考文献
@@ -39,3 +42,6 @@
 - Word embeddings quantify 100 years of gender and ethnic stereotypes, Nikhil Garga, Londa Schiebinger, Dan Jurafsky, and James Zou. 2017. Pnas.
 - The product space conditions the development of nations. Hidago, 2007, Science.
 - The book of Deep Learning, Chapter 2. [svd method](https://www.deeplearningbook.org/contents/linear_algebra.html)
+
+## day 4
+- The building blocks of economic complexity
