@@ -19,12 +19,20 @@
   - cultrual dimension
   - Using [svd method](https://www.deeplearningbook.org/contents/linear_algebra.html) finding the main diension.
   - deepwalk, network embeddings.
+
 ## 20190704
 1. CNN
 2. discussing the applications of deep learning methods & eci method of hidalgo's research.
+3. [HITS and ECI](https://nbviewer.jupyter.org/github/computational-class/summer-school/blob/master/class_04_hits.ipynb) 
+
+## 20190705
+1. transE
+2. RNN
 
 
-# 参考文献
+
+
+# Readings
 ## day 1
 - The book of [Deep Learning](https://www.deeplearningbook.org)
   - [Chapter 1](https://www.deeplearningbook.org/contents/intro.html)
@@ -45,3 +53,8 @@
 
 ## day 4
 - The building blocks of economic complexity
+- Effects of Exposure to Political Protests on Political Discussion and Attitudes in Authoritarian Regimes: Evidence from Eight Natural Experiments with Chinese Social Media, Zhang Han, AJS.
+- CASM: A Deep Learning Approach for Identifying Collective Action Events with Text and Image Data from Social Media. Han Zhang∗ Jennifer Pan. 2019.
+
+## day 5
+- Unsupervised word embeddings capture latent knowledge from materials science literature
