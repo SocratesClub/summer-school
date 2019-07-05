@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<!-- saved from url=(0063)http://pyvandenbussche.info/2017/translating-embeddings-transe/ -->
+<html lang="en-GB"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="profile" href="http://gmpg.org/xfn/11">
+	<link rel="pingback" href="http://pyvandenbussche.info/xmlrpc.php">
+
+<title>Translating Embeddings (TransE) – Pierre-Yves Vandenbussche</title>
+<link rel="dns-prefetch" href="http://fonts.googleapis.com/">
+<link rel="dns-prefetch" href="http://s.w.org/">
+<link rel="alternate" type="application/rss+xml" title="Pierre-Yves Vandenbussche » Feed" href="http://pyvandenbussche.info/feed/">
+<link rel="alternate" type="application/rss+xml" title="Pierre-Yves Vandenbussche » Comments Feed" href="http://pyvandenbussche.info/comments/feed/">
+<link rel="alternate" type="application/rss+xml" title="Pierre-Yves Vandenbussche » Translating Embeddings (TransE) Comments Feed" href="http://pyvandenbussche.info/2017/translating-embeddings-transe/feed/">
+		<script async="" src="./Translating Embeddings TransE_files/analytics.js"></script><script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.3\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.3\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/pyvandenbussche.info\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.8.7"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,56826,8203,55356,56819),0,0),c=j.toDataURL(),b!==c&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55358,56794,8205,9794,65039),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55358,56794,8203,9794,65039),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel="stylesheet" id="papercite_css-css" href="./Translating Embeddings TransE_files/papercite.css" type="text/css" media="all">
+<link rel="stylesheet" id="tora-bootstrap-css" href="./Translating Embeddings TransE_files/bootstrap.min.css" type="text/css" media="all">
+<link rel="stylesheet" id="dslc-fontawesome-css" href="./Translating Embeddings TransE_files/font-awesome.css" type="text/css" media="all">
+<link rel="stylesheet" id="dslc-main-css-css" href="./Translating Embeddings TransE_files/main.css" type="text/css" media="all">
+<link rel="stylesheet" id="dslc-modules-css-css" href="./Translating Embeddings TransE_files/modules.css" type="text/css" media="all">
+<link rel="stylesheet" id="dslc-plugins-css-css" href="./Translating Embeddings TransE_files/plugins.css" type="text/css" media="all">
+<!--[if IE]>
+<link rel='stylesheet' id='dslc-css-ie-css'  href='http://pyvandenbussche.info/wp-content/plugins/live-composer-page-builder/css/ie.css?ver=1.3.5' type='text/css' media='all' />
+<![endif]-->
+<link rel="stylesheet" id="tora-style-css" href="./Translating Embeddings TransE_files/style.css" type="text/css" media="all">
+<style id="tora-style-inline-css" type="text/css">
+.site-logo { max-height:60px;}
+@media only screen and (max-width: 1024px) { .contact-area { display:none;}}
+body {font-family: 'Lato', sans-serif;}
+h1, h2, h3, h4, h5, h6 {font-family: 'Raleway', sans-serif;}
+h1 { font-size:36px; }
+h2 { font-size:30px; }
+h3 { font-size:24px; }
+h4 { font-size:18px; }
+h5 { font-size:14px; }
+h6 { font-size:12px; }
+body { font-size:14px; }
+.main-navigation li { font-size:14px; }
+.site-title a { color:#3E4C53;}
+.site-description { color:#1C1E21;}
+.contact-area { background-color:#22394C;}
+.contact-area, .contact-area a { color:#7496AB;}
+.site-header { background-color:#fff;}
+.main-navigation a { color:#3E4C53;}
+.header-text { color:#fff;}
+.left-button { color:#fff;}
+.left-button { border-color:#fff;}
+.left-button:hover { background-color:#fff;}
+.right-button:hover { color:#22394C;}
+.right-button { border-color:#22394C;}
+.right-button { background-color:#22394C;}
+.footer-widgets, .site-footer { background-color:#f2f2f2;}
+.site-footer, .site-footer a, .footer-widgets .widget, .footer-widgets .widget a { color:#7496AB;}
+
+</style>
+<link rel="stylesheet" id="tora-body-fonts-css" href="./Translating Embeddings TransE_files/css" type="text/css" media="all">
+<link rel="stylesheet" id="tora-headings-fonts-css" href="./Translating Embeddings TransE_files/css(1)" type="text/css" media="all">
+<link rel="stylesheet" id="tora-elegant-icons-css" href="./Translating Embeddings TransE_files/style(1).css" type="text/css" media="all">
+<script type="text/javascript" src="./Translating Embeddings TransE_files/jquery.js"></script>
+<script type="text/javascript" src="./Translating Embeddings TransE_files/jquery-migrate.min.js"></script>
+<script type="text/javascript" src="./Translating Embeddings TransE_files/papercite.js"></script>
+<script type="text/javascript" src="./Translating Embeddings TransE_files/plugins.js"></script>
+<link rel="https://api.w.org/" href="http://pyvandenbussche.info/wp-json/">
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://pyvandenbussche.info/xmlrpc.php?rsd">
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://pyvandenbussche.info/wp-includes/wlwmanifest.xml"> 
+<link rel="prev" title="Essence of Calculus" href="http://pyvandenbussche.info/2017/essence-of-calculus/">
+<link rel="next" title="Knowledge Graph Features and Explanation" href="http://pyvandenbussche.info/2017/knowledge-graph-features-and-explanation/">
+<meta name="generator" content="WordPress 4.8.7">
+<link rel="canonical" href="http://pyvandenbussche.info/2017/translating-embeddings-transe/">
+<link rel="shortlink" href="http://pyvandenbussche.info/?p=120">
+<link rel="alternate" type="application/json+oembed" href="http://pyvandenbussche.info/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fpyvandenbussche.info%2F2017%2Ftranslating-embeddings-transe%2F">
+<link rel="alternate" type="text/xml+oembed" href="http://pyvandenbussche.info/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fpyvandenbussche.info%2F2017%2Ftranslating-embeddings-transe%2F&amp;format=xml">
+<style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #22394c; }
+</style>
+<style type="text/css">.dslc-modules-section-wrapper, .dslca-add-modules-section { width : 1170px; } .dslc-modules-section:not(.dslc-full) { padding-left: 4%;  padding-right: 4%; } .dslc-modules-section { background-image:disabled;background-repeat:repeat;background-position:left top;background-attachment:scroll;background-size:auto;border-width:0px;border-style:solid;margin-left:0%;margin-right:0%;margin-bottom:0px;padding-bottom:80px;padding-top:80px;padding-left:0%;padding-right:0%; }
+
+/*  CSS FOR POST ID: 55 */
+#dslc-module-b695bceccf1 h1{border-top-left-radius:0px;border-top-right-radius:0px;border-bottom-left-radius:0px;border-bottom-right-radius:0px;margin-bottom:20px;min-height:0px;padding-top:0px;padding-bottom:0px;padding-left:0px;padding-right:0px;font-size:36px;font-weight:400;font-family:"Open Sans";line-height:40px;text-align:left ;text-transform:none ;} #dslc-module-f438a7cb347 .dslc-tp-thumbnail{text-align:left ;border-top-left-radius:0px;border-top-right-radius:0px;border-bottom-left-radius:0px;border-bottom-right-radius:0px;margin-bottom:0px;min-height:0px;padding-top:0px;padding-bottom:0px;padding-left:0px;padding-right:0px;} #dslc-module-cef516a4bb5 .dslc-separator{margin-bottom:25px;padding-bottom:25px;border-color:#ededed;border-width:1px;} #dslc-module-cef516a4bb5 .dslc-separator-wrapper{background-repeat:repeat ;background-attachment:scroll ;background-position:top left ;border-top-left-radius:0px;border-top-right-radius:0px;border-bottom-left-radius:0px;border-bottom-right-radius:0px;} #dslc-module-0220543b160 .dslc-tp-meta{text-align:left ;border-top-left-radius:0px;border-top-right-radius:0px;border-bottom-left-radius:0px;border-bottom-right-radius:0px;margin-bottom:0px;min-height:0px;padding-top:5px;padding-bottom:5px;padding-left:0px;padding-right:0px;} #dslc-module-0220543b160 li{margin:10px;color:#4d4d4d ;} #dslc-module-0220543b160 .dslc-tp-meta-avatar img{border-radius:100px;} #dslc-module-0220543b160 .dslc-tp-meta-avatar{margin-right:10px;width:30px;} #dslc-module-0220543b160 li,#dslc-module-0220543b160 li a{font-size:13px;font-weight:400;font-family:"Open Sans";line-height:30px;} #dslc-module-f5ed2f20098 .dslc-separator{margin-bottom:25px;padding-bottom:25px;border-color:#ededed;border-width:1px;} #dslc-module-f5ed2f20098 .dslc-separator-wrapper{background-repeat:repeat ;background-attachment:scroll ;background-position:top left ;border-top-left-radius:0px;border-top-right-radius:0px;border-bottom-left-radius:0px;border-bottom-right-radius:0px;} </style><link href="./Translating Embeddings TransE_files/css(2)" rel="stylesheet"><style type="text/css" id="syntaxhighlighteranchor"></style>
+<link rel="icon" href="http://pyvandenbussche.info/wp-content/uploads/2017/07/cropped-images-32x32.jpg" sizes="32x32">
+<link rel="icon" href="http://pyvandenbussche.info/wp-content/uploads/2017/07/cropped-images-192x192.jpg" sizes="192x192">
+<link rel="apple-touch-icon-precomposed" href="http://pyvandenbussche.info/wp-content/uploads/2017/07/cropped-images-180x180.jpg">
+<meta name="msapplication-TileImage" content="http://pyvandenbussche.info/wp-content/uploads/2017/07/cropped-images-270x270.jpg">
+<style id="fit-vids-style">.fluid-width-video-wrapper{width:100%;position:relative;padding:0;}.fluid-width-video-wrapper iframe,.fluid-width-video-wrapper object,.fluid-width-video-wrapper embed {position:absolute;top:0;left:0;width:100%;height:100%;}</style></head>
+
+<body class="post-template-default single single-post postid-120 single-format-standard custom-background dslc-page dslc-page-has-content tora-sticky-menu dslc-res-smaller-monitor">
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-105851783-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<div class="preloader" style="opacity: 0; display: none;">
+	<div class="preloader-inner"></div>
+</div>
+
+<div id="page" class="hfeed site">
+	<a class="skip-link screen-reader-text" href="http://pyvandenbussche.info/2017/translating-embeddings-transe/#content">Skip to content</a>
+
+			<div class="contact-area has-social">
+					<div class="container clearfix">
+								<nav class="contact-social clearfix">
+					<div class="menu-social-media-container"><ul id="menu-social-media" class="menu clearfix"><li id="menu-item-16" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-16"><a href="https://twitter.com/pyvandenbussche" target="_blank"><span class="screen-reader-text">twitter</span></a></li>
+<li id="menu-item-23" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-23"><a href="https://www.linkedin.com/in/pyvandenbussche/" target="_blank"><span class="screen-reader-text">linkedin</span></a></li>
+<li id="menu-item-24" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-24"><a href="https://plus.google.com/u/0/+PierreYvesVandenbussche" target="_blank"><span class="screen-reader-text">google+</span></a></li>
+<li id="menu-item-28" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-28"><a href="https://github.com/pyvandenbussche" target="_blank"><span class="screen-reader-text">github</span></a></li>
+<li id="menu-item-30" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-30"><a href="https://www.slideshare.net/pyvandenbussche" target="_blank"><span class="screen-reader-text">slideshare</span></a></li>
+</ul></div>				</nav>
+								<div class="contact-info">
+															<div class="contact-block">
+						<i class="tora-icon dslc-icon-ei-icon_mail_alt"></i><a href="mailto:py.vandenbussche@gmail.com">py.vandenbussche@gmail.com</a>
+					</div>
+														</div>
+			</div>
+			<div class="contact-mobile">
+				<i class="tora-icon dslc-icon-ei-arrow_triangle-down_alt2"></i>Contact			</div>
+		</div>			
+		<header id="masthead" class="site-header clearfix" role="banner">
+		<div class="container">
+			<div class="site-branding">
+				<h1 class="site-title"><a href="http://pyvandenbussche.info/" rel="home">Pierre-Yves Vandenbussche</a></h1>			</div>
+			<nav id="site-navigation" class="main-navigation" role="navigation">
+				<button class="menu-toggle" aria-controls="primary-menu" aria-expanded="false">Primary Menu</button>
+				<div class="menu-main-menu-container"><ul id="primary-menu" class="menu"><li id="menu-item-106" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-106"><a href="http://pyvandenbussche.info/publications/">Publications</a></li>
+<li id="menu-item-105" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-105"><a href="http://pyvandenbussche.info/about/">About</a></li>
+<li class="search-item"><i class="tora-icon dslc-icon-ei-icon_search"></i></li></ul></div>			</nav>
+			<nav class="mobile-nav"><div class="slicknav_menu"><a href="http://pyvandenbussche.info/2017/translating-embeddings-transe/#" aria-haspopup="true" tabindex="0" class="slicknav_btn slicknav_collapsed" style="outline: none;"><span class="slicknav_menutxt"><i class="tora-icon dslc-icon-ei-icon_menu"></i></span><span class="slicknav_icon"><span class="slicknav_icon-bar"></span><span class="slicknav_icon-bar"></span><span class="slicknav_icon-bar"></span></span></a><ul class="slicknav_nav slicknav_hidden" aria-hidden="true" role="menu" style="display: none;"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-106"><a href="http://pyvandenbussche.info/publications/" role="menuitem" tabindex="-1">Publications</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-105"><a href="http://pyvandenbussche.info/about/" role="menuitem" tabindex="-1">About</a></li>
+<li class="search-item"><i class="tora-icon dslc-icon-ei-icon_search"></i></li></ul></div></nav>
+		</div>
+	</header><!-- #masthead -->
+	<div class="header-clone" style="height: 109px;"></div>
+	<div class="header-search"><div class="search-close"><i class="tora-icon dslc-icon-ei-icon_close"></i></div><div class="header-search-inner"><form role="search" method="get" class="search-form" action="http://pyvandenbussche.info/">
+				<label>
+					<span class="screen-reader-text">Search for:</span>
+					<input type="search" class="search-field" placeholder="Search …" value="" name="s">
+				</label>
+				<input type="submit" class="search-submit" value="Search">
+			</form></div></div>
+	
+	<div id="content" class="site-content">
+			<div class="container">
+	
+	<div id="dslc-content" class="dslc-content dslc-clearfix"><div id="dslc-main">
+		<div class="dslc-modules-section " style="background-color:#ffffff;padding-bottom:35px;padding-top:35px;padding-left:10%;padding-right:10%;" data-section-id="b15e9d984f5">
+
+				
+
+				<div class="dslc-modules-section-wrapper dslc-clearfix"><div class="dslc-modules-area dslc-col dslc-12-col dslc-last-col" data-size="12">
+		<div id="dslc-module-b695bceccf1" class="dslc-module-front dslc-module-DSLC_TP_Title dslc-in-viewport-check dslc-in-viewport-anim-none  dslc-col dslc-12-col dslc-last-col  dslc-module-handle-like-regular  dslc-in-viewport" data-module-id="b695bceccf1" data-dslc-module-id="DSLC_TP_Title" data-dslc-module-size="12" data-dslc-anim="none" data-dslc-anim-delay="0" data-dslc-anim-duration="650" data-dslc-anim-easing="ease" data-dslc-preset="none" style="animation: 0.65s ease 0s 1 normal none running forwards;">
+
+			
+			
+		
+				<div class="dslc-tp-title"><h1>Translating Embeddings (TransE)</h1></div>
+
+			
+				</div><!-- .dslc-module -->
+		
+		<div id="dslc-module-f438a7cb347" class="dslc-module-front dslc-module-DSLC_TP_Thumbnail dslc-in-viewport-check dslc-in-viewport-anim-none  dslc-col dslc-6-col  dslc-module-handle-like-regular  dslc-in-viewport" data-module-id="f438a7cb347" data-dslc-module-id="DSLC_TP_Thumbnail" data-dslc-module-size="6" data-dslc-anim="none" data-dslc-anim-delay="0" data-dslc-anim-duration="650" data-dslc-anim-easing="ease" data-dslc-preset="none" style="animation: 0.65s ease 0s 1 normal none running forwards;">
+
+			
+			
+		
+			<div class="dslc-tp-thumbnail">
+																					<img src="http://pyvandenbussche.info/2017/translating-embeddings-transe/" alt="transe">
+												</div>
+
+		
+		
+				</div><!-- .dslc-module -->
+		
+		<div id="dslc-module-cef516a4bb5" class="dslc-module-front dslc-module-DSLC_Separator dslc-in-viewport-check dslc-in-viewport-anim-none  dslc-col dslc-2-col  dslc-module-handle-like-regular  dslc-in-viewport" data-module-id="cef516a4bb5" data-dslc-module-id="DSLC_Separator" data-dslc-module-size="2" data-dslc-anim="none" data-dslc-anim-delay="0" data-dslc-anim-duration="650" data-dslc-anim-easing="ease" data-dslc-preset="none" style="animation: 0.65s ease 0s 1 normal none running forwards;">
+
+			
+			
+					<div class="dslc-separator-wrapper">
+				<div class="dslc-separator dslc-separator-style-invisible">
+									</div><div></div>
+			</div><!-- .dslc-separator-wrapper -->
+			
+				</div><!-- .dslc-module -->
+		
+		<div id="dslc-module-0220543b160" class="dslc-module-front dslc-module-DSLC_TP_Meta dslc-in-viewport-check dslc-in-viewport-anim-none  dslc-col dslc-4-col dslc-last-col  dslc-module-handle-like-regular  dslc-in-viewport" data-module-id="0220543b160" data-dslc-module-id="DSLC_TP_Meta" data-dslc-module-size="4" data-dslc-anim="none" data-dslc-anim-delay="0" data-dslc-anim-duration="650" data-dslc-anim-easing="ease" data-dslc-preset="none" style="animation: 0.65s ease 0s 1 normal none running forwards;">
+
+			
+			
+		
+				<div class="dslc-tp-meta dslc-tp-meta-vertical">
+					<ul class="dslc-clearfix">
+
+													<li>2017-08-29</li>
+						
+						
+																					<li><a href="http://pyvandenbussche.info/category/computer-science/artificial-intelligence/">Artificial Intelligence</a>, <a href="http://pyvandenbussche.info/category/computer-science/">Computer Science</a>, <a href="http://pyvandenbussche.info/category/computer-science/artificial-intelligence/knowledge-graph-mining/">Knowledge Graph Mining</a></li>													
+																					<li><a href="http://pyvandenbussche.info/tag/knowledge-graph/">Knowledge Graph</a>, <a href="http://pyvandenbussche.info/tag/link-prediction/">Link Prediction</a>, <a href="http://pyvandenbussche.info/tag/transe/">TransE</a></li>													
+						
+					</ul>
+				</div>
+
+			
+				</div><!-- .dslc-module -->
+		
+		<div id="dslc-module-f5ed2f20098" class="dslc-module-front dslc-module-DSLC_Separator dslc-in-viewport-check dslc-in-viewport-anim-none  dslc-col dslc-12-col dslc-last-col  dslc-module-handle-like-regular  dslc-in-viewport" data-module-id="f5ed2f20098" data-dslc-module-id="DSLC_Separator" data-dslc-module-size="12" data-dslc-anim="none" data-dslc-anim-delay="0" data-dslc-anim-duration="650" data-dslc-anim-easing="ease" data-dslc-preset="none" style="animation: 0.65s ease 0s 1 normal none running forwards;">
+
+			
+			
+					<div class="dslc-separator-wrapper">
+				<div class="dslc-separator dslc-separator-style-solid">
+									</div><div></div>
+			</div><!-- .dslc-separator-wrapper -->
+			
+				</div><!-- .dslc-module -->
+		</div><div class="dslc-modules-area dslc-col dslc-12-col dslc-last-col" data-size="12">
+		<div id="dslc-module-cd0567637e3" class="dslc-module-front dslc-module-DSLC_TP_Content dslc-in-viewport-check dslc-in-viewport-anim-none  dslc-col dslc-12-col dslc-last-col  dslc-module-handle-like-regular  dslc-in-viewport" data-module-id="cd0567637e3" data-dslc-module-id="DSLC_TP_Content" data-dslc-module-size="12" data-dslc-anim="none" data-dslc-anim-delay="0" data-dslc-anim-duration="650" data-dslc-anim-easing="ease" data-dslc-preset="none" style="animation: 0.65s ease 0s 1 normal none running forwards;">
+
+			
+			
+		<div class="dslc-tp-content"><div id="dslc-theme-content"><div id="dslc-theme-content-inner"><p><!--[pyv_load_lib fil="js/mathbox-bundle.min.js,css/mathbox.css"]--><br>
+<!--[pyv_load_files_footer fil="transE/transE-01.js,transE/transE-02.js"]--></p>
+<p>In this post I present <strong>Translating Embeddings (TransE)</strong>, a method for the prediction of missing relationships in knowledge graphs. Rather than digging into the mathematics, I focus on presenting the intuition behind this method by the help of explanatory animations using the excellent WebGL library <a href="http://pyvandenbussche.info/2017/webgl/"><span><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>M</mi><mi>a</mi><mi>t</mi><mi>h</mi><mi>b</mi><mi>o</mi><msup><mi>x</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">Mathbox^2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height: 0.814108em;"></span><span class="strut bottom" style="height: 0.814108em; vertical-align: 0em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right: 0.10903em;">M</span><span class="mord mathit">a</span><span class="mord mathit">t</span><span class="mord mathit">h</span><span class="mord mathit">b</span><span class="mord mathit">o</span><span class="mord"><span class="mord mathit">x</span><span class="msupsub"><span class="vlist"><span class="" style="top: -0.363em; margin-right: 0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span class="" style="font-size: 0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped mtight"><span class="mord mathrm mtight">2</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span class="" style="font-size: 0em;">​</span></span>​</span></span></span></span></span></span></span></span></a>. Doing so, I hope that even a reader with limited mathematical or machine learning background will be able to understand the essence of TransE. Readers interested by a formal description can report to the <a href="https://papers.nips.cc/paper/5071-translating-embeddings-for-modeling-multi-relational-data" target="_blank" rel="noopener">original article</a>.</p>
+<p>I like to consider TransE as a textbook case model to describe <a href="http://pyvandenbussche.info/tag/link-prediction/">link prediction</a> in multi-relational data (knowledge graphs). It has a straight geometric visualisation which makes it particularly intuitive and easy to understand. TransE is a method which models relationships by interpreting them as <strong>translations</strong> operating not on the graph structure directly but on a learned <strong>low-dimensional embedding</strong> of the <a href="http://pyvandenbussche.info/tag/knowledge-graph/">knowledge graph</a> entities. The method has been published in <a href="https://papers.nips.cc/paper/5071-translating-embeddings-for-modeling-multi-relational-data" target="_blank" rel="noopener">NIPS 2013 by Antoine Bordes <em>et al.</em></a> and inspired from the work of Tomas Mikolov: <a href="http://papers.nips.cc/paper/5021-distributed-representations-of-words-and-phrases-and-their-compositionality">word2vec</a>.</p>
+<p>Throughout the post, I will use an example from the <a href="https://en.wikipedia.org/wiki/Freebase" target="_blank" rel="noopener">Freebase</a> data set (now replaced by <a href="https://www.wikidata.org/" target="_blank">wikidata</a>) about book authors, their mutual influence and genre. The example is small enough to be easily visualised.</p>
+<h2>1. It all started with a Knowledge Graph</h2>
+<p>Think about your network of friends; a list of countries, their capitals and regions; or the books on your shelf, their authors and genre. This information can be conveniently represented as a graph connecting people, things, places in the world. A knowledge graph is composed of facts/statements about inter-related concrete or abstract entities. </p>
+<p>There is a natural representation of the fact “<em>J.K. Rowling is influenced by C.S. Lewis</em>” in the form of a graph with two nodes/vertices “<em>J.K. Rowling</em>” and “<em>C.S. Lewis</em>” linked by a relationship/edge labeled “<em>is influenced by</em>” from the subject vertex “<em>J.K. Rowling</em>” to the object “<em>C.S. Lewis</em>“. Naturally, other facts can be added to this knowledge graph, involving different relation types such as the fact that both “<em>J.K. Rowling</em>” and “<em>C.S. Lewis</em>” have for writing genre “<em>Fantasy</em>“. </p>
+<p>The visualisation below, illustrates the creation of our knowledge graph example composed of 9 vertices, 11 edges and 2 relation types. <span style="color: #1B7712"><strong>Green vertices</strong></span> represent entities of type “<span style="color: #1B7712"><strong><em>Genre</em></strong></span>“, <span style="color: #034f84"><strong>blue vertices</strong></span> vertices of type “<em><span style="color: #034f84"><strong>Person</strong></span></em>“. <span style="color: #57C74D"><strong>Light green edges</strong></span> represent the relationship type “<span style="color: #57C74D"><strong><em>genre</em></strong></span>” while <span style="color: #3090ff"><strong>light blue edges</strong></span> represent relationships of type “<span style="color: #3090ff"><strong><em>is influenced by</em></strong></span>“.</p>
+<p><iframe style="width: 100%; height: 450px;" src="./Translating Embeddings TransE_files/transe_01_KG.html" width="300" height="150" frameborder="0"></iframe></p>
+<h2>2. Link Prediction in Knowledge Graphs</h2>
+<p>Although knowledge graphs (KGs) contain a large number of facts (Freebase has around 2 billion triples), they are missing some entities and links. <strong>Incompleteness</strong> of KGs can substantially affect the efficiency of systems relying on them. Recent research effort is focusing on the development of automatic methods for the prediction of new implicit facts. An activity called <strong>Link Prediction</strong> or <strong>Knowledge Graph completion</strong>.</p>
+<p>Link prediction models learn from local and global connectivity patterns from entities and relationships of different types at the same time. Relation predictions are then performed by using the learned patterns to generalise observed relationships between an entity of interest and all others. In our toy KG, we can see how local connectivity patterns may help the prediction of implicit genre and influence of “<em>J.K. Rowling</em>“.</p>
+<p><iframe style="width: 100%; height: 450px;" src="./Translating Embeddings TransE_files/transe_02_KG.html" width="300" height="150" frameborder="0"></iframe></p>
+<h2>3. Essence of Translating Embeddings (TransE)</h2>
+<p>Manipulating large knowledge graph can be challenging. To address <strong>scalability </strong>and performance issues, a state-of-the-art solution is to <strong>embed knowledge graph</strong> components (entities and relation types) in a low dimensional continuous vector space while preserving some properties of the original graph of importance for a given discovery task. </p>
+<p>In TransE, relationships are represented as <strong>translations </strong>in the embedding space: if a fact “<em>subject, relation, object</em>” holds, then the embedding of the object entity <strong>should be close</strong> to the embedding of the subject entity plus some vector representing the relationship type. We want the learned embedding of <span><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mrow><mi mathvariant="bold">s</mi><mi mathvariant="bold">u</mi><mi mathvariant="bold">b</mi><mi mathvariant="bold">j</mi><mi mathvariant="bold">e</mi><mi mathvariant="bold">c</mi><mi mathvariant="bold">t</mi><mo>+</mo><mi mathvariant="bold">r</mi><mi mathvariant="bold">e</mi><mi mathvariant="bold">l</mi><mi mathvariant="bold">a</mi><mi mathvariant="bold">t</mi><mi mathvariant="bold">i</mi><mi mathvariant="bold">o</mi><mi mathvariant="bold">n</mi><mspace width="0.277778em"></mspace><mi mathvariant="bold">t</mi><mi mathvariant="bold">y</mi><mi mathvariant="bold">p</mi><mi mathvariant="bold">e</mi><mo>≈</mo><mi mathvariant="bold">o</mi><mi mathvariant="bold">b</mi><mi mathvariant="bold">j</mi><mi mathvariant="bold">e</mi><mi mathvariant="bold">c</mi><mi mathvariant="bold">t</mi></mrow></mrow><annotation encoding="application/x-tex">\mathbf{subject+relation\;type\approx object}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height: 0.69444em;"></span><span class="strut bottom" style="height: 0.88888em; vertical-align: -0.19444em;"></span><span class="base textstyle uncramped"><span class="mord textstyle uncramped"><span class="mord mathbf">s</span><span class="mord mathbf">u</span><span class="mord mathbf">b</span><span class="mord mathbf">j</span><span class="mord mathbf">e</span><span class="mord mathbf">c</span><span class="mord mathbf">t</span><span class="mbin">+</span><span class="mord mathbf">r</span><span class="mord mathbf">e</span><span class="mord mathbf">l</span><span class="mord mathbf">a</span><span class="mord mathbf">t</span><span class="mord mathbf">i</span><span class="mord mathbf">o</span><span class="mord mathbf">n</span><span class="mord mathbf"><span class="mspace thickspace"></span><span class="mord mathbf">t</span></span><span class="mord mathbf" style="margin-right: 0.01597em;">y</span><span class="mord mathbf">p</span><span class="mord mathbf">e</span><span class="mrel">≈</span><span class="mord mathbf">o</span><span class="mord mathbf">b</span><span class="mord mathbf">j</span><span class="mord mathbf">e</span><span class="mord mathbf">c</span><span class="mord mathbf">t</span></span></span></span></span></span> for a given fact in the KG while <span><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mrow><mi mathvariant="bold">s</mi><mi mathvariant="bold">u</mi><mi mathvariant="bold">b</mi><mi mathvariant="bold">j</mi><mi mathvariant="bold">e</mi><mi mathvariant="bold">c</mi><mi mathvariant="bold">t</mi><mo>+</mo><mi mathvariant="bold">r</mi><mi mathvariant="bold">e</mi><mi mathvariant="bold">l</mi><mi mathvariant="bold">a</mi><mi mathvariant="bold">t</mi><mi mathvariant="bold">i</mi><mi mathvariant="bold">o</mi><mi mathvariant="bold">n</mi></mrow></mrow><annotation encoding="application/x-tex">\mathbf{subject+relation}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height: 0.69444em;"></span><span class="strut bottom" style="height: 0.88888em; vertical-align: -0.19444em;"></span><span class="base textstyle uncramped"><span class="mord textstyle uncramped"><span class="mord mathbf">s</span><span class="mord mathbf">u</span><span class="mord mathbf">b</span><span class="mord mathbf">j</span><span class="mord mathbf">e</span><span class="mord mathbf">c</span><span class="mord mathbf">t</span><span class="mbin">+</span><span class="mord mathbf">r</span><span class="mord mathbf">e</span><span class="mord mathbf">l</span><span class="mord mathbf">a</span><span class="mord mathbf">t</span><span class="mord mathbf">i</span><span class="mord mathbf">o</span><span class="mord mathbf">n</span></span></span></span></span></span> should be far away from the <span><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mrow><mi mathvariant="bold">o</mi><mi mathvariant="bold">b</mi><mi mathvariant="bold">j</mi><mi mathvariant="bold">e</mi><mi mathvariant="bold">c</mi><mi mathvariant="bold">t</mi></mrow></mrow><annotation encoding="application/x-tex">\mathbf{object}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height: 0.69444em;"></span><span class="strut bottom" style="height: 0.88888em; vertical-align: -0.19444em;"></span><span class="base textstyle uncramped"><span class="mord textstyle uncramped"><span class="mord mathbf">o</span><span class="mord mathbf">b</span><span class="mord mathbf">j</span><span class="mord mathbf">e</span><span class="mord mathbf">c</span><span class="mord mathbf">t</span></span></span></span></span></span> if the fact is wrong.</p>
+<p>The visualisation below illustrates the iterative process by which the method learns entities and relationships embeddings to conform to the translation property. In this example, “<em>J.K. Rowling</em>” and “<em>C.S. Lewis</em>” will end up having a similar vector as their translation by the vector representing “<em>genre</em>” relationship type must be close to the embedding of “<em>Fantasy</em>” genre.</p>
+<p><iframe style="width: 100%; height: 450px;" src="./Translating Embeddings TransE_files/transe_02.1_KG.html" width="300" height="150" frameborder="0"></iframe></p>
+<p>Once the model has learned an embedding vector for each entity and relationship type, predictions will be performed using the same translation approach in the embedding space. The prediction for a given <span><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>s</mi><mi>u</mi><mi>b</mi><mi>j</mi><mi>e</mi><mi>c</mi><mi>t</mi></mrow><annotation encoding="application/x-tex">subject</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height: 0.69444em;"></span><span class="strut bottom" style="height: 0.88888em; vertical-align: -0.19444em;"></span><span class="base textstyle uncramped"><span class="mord mathit">s</span><span class="mord mathit">u</span><span class="mord mathit">b</span><span class="mord mathit" style="margin-right: 0.05724em;">j</span><span class="mord mathit">e</span><span class="mord mathit">c</span><span class="mord mathit">t</span></span></span></span></span> – <span><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>r</mi><mi>e</mi><mi>l</mi><mi>a</mi><mi>t</mi><mi>i</mi><mi>o</mi><mi>n</mi><mspace width="0.277778em"></mspace><mi>t</mi><mi>y</mi><mi>p</mi><mi>e</mi></mrow><annotation encoding="application/x-tex">relation\;type</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height: 0.69444em;"></span><span class="strut bottom" style="height: 0.88888em; vertical-align: -0.19444em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right: 0.02778em;">r</span><span class="mord mathit">e</span><span class="mord mathit" style="margin-right: 0.01968em;">l</span><span class="mord mathit">a</span><span class="mord mathit">t</span><span class="mord mathit">i</span><span class="mord mathit">o</span><span class="mord mathit">n</span><span class="mord mathit"><span class="mspace thickspace"></span><span class="mord mathit">t</span></span><span class="mord mathit" style="margin-right: 0.03588em;">y</span><span class="mord mathit">p</span><span class="mord mathit">e</span></span></span></span></span> is evaluated by picking the <strong>nearest neighbor entity</strong> of the translation of the <span><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>s</mi><mi>u</mi><mi>b</mi><mi>j</mi><mi>e</mi><mi>c</mi><mi>t</mi></mrow><annotation encoding="application/x-tex">subject</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height: 0.69444em;"></span><span class="strut bottom" style="height: 0.88888em; vertical-align: -0.19444em;"></span><span class="base textstyle uncramped"><span class="mord mathit">s</span><span class="mord mathit">u</span><span class="mord mathit">b</span><span class="mord mathit" style="margin-right: 0.05724em;">j</span><span class="mord mathit">e</span><span class="mord mathit">c</span><span class="mord mathit">t</span></span></span></span></span> by the <span><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>r</mi><mi>e</mi><mi>l</mi><mi>a</mi><mi>t</mi><mi>i</mi><mi>o</mi><mi>n</mi><mspace width="0.277778em"></mspace><mi>t</mi><mi>y</mi><mi>p</mi><mi>e</mi></mrow><annotation encoding="application/x-tex">relation\;type</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height: 0.69444em;"></span><span class="strut bottom" style="height: 0.88888em; vertical-align: -0.19444em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right: 0.02778em;">r</span><span class="mord mathit">e</span><span class="mord mathit" style="margin-right: 0.01968em;">l</span><span class="mord mathit">a</span><span class="mord mathit">t</span><span class="mord mathit">i</span><span class="mord mathit">o</span><span class="mord mathit">n</span><span class="mord mathit"><span class="mspace thickspace"></span><span class="mord mathit">t</span></span><span class="mord mathit" style="margin-right: 0.03588em;">y</span><span class="mord mathit">p</span><span class="mord mathit">e</span></span></span></span></span>. In other terms, the prediction task corresponds to the query: “What is the most likely object associated to a given subject entity and a given relation type?”. The prediction in the embedding space can then be transformed into a <strong>new triple fact</strong> in the knowledge graph. </p>
+<p>For example, if we want to predict the literature genre of “<em>Lloyd Alexander</em>“, we can use the translation of its embedding by the “<em>genre</em>” relationship type vector. The closest entity “<em>Fantasy</em>” is the most likely true answer.</p>
+<p><iframe style="width: 100%; height: 450px;" src="./Translating Embeddings TransE_files/transe_02.2_KG.html" width="300" height="150" frameborder="0"></iframe></p>
+<h2>4. Learning TransE</h2>
+<h4>– Model optimisation objective:</h4>
+<p>The embeddings are learned over several iterations where the system will try to find particular vectors configuration for entities and relationships that follows the intuition: <strong>the “error of translation” of a true fact (that exists in the KG) should be smaller by a certain margin than the “error of translation” of a wrong fact (that does not exist in the KG)</strong>. The “error of translation” is called dissimilarity measure of a KG fact. In order to generate wrong facts, the system corrupt the subject or the object of an existing fact by replacing it with any other randomly picked entity in the KG.</p>
+<h4>– Initialisation in low dimensionsal space:</h4>
+<p>The learning process starts with the <strong>random initialisation</strong> of all entities and relationships embeddings in a space with low dimensions (e.g. 50 dimensions). This initialisation is meant to set them in an optimal range for applying optimisation and to avoid the particular case of having embeddings equal to zero</p>
+<h4>– Optimisation epochs:</h4>
+<p>Each learning iteration, also called “epoch”, starts with normalising the embeddings (this prevents the method to trivially optimise the model by increasing the relative distance between the entity embeddings). As in many Machine Learning models, the system iterates over a portion of the KG facts (training set) and perform an <strong>optimisation task of the model objective</strong>. After each iteration, the entities and relationships embeddings are updated so to optimise this objective. The learning process stops based on the model performance on a portion of the KG facts left apart (validation set).</p>
+<p>An illustration of the learning phase of the model is presented in the next visualisation (click on pause to explore manually the 3D visualisation). “<em>J.K. Rowling</em>” and several literature genre entities embeddings are shown at epochs 0 (initialisaiton), 40, 80, 120, 160 an 200. The arrow materialise the “<em>genre</em>” relationship type vector for “<em>J.K. Rowling</em>” entity. At the 200th epoch, the most likely genre of J.K. Rowling are in descendent order of likelihood: <strong>[Fantasy, Science fiction, Mystery fiction, Horror, Autobiography]</strong>. For each genre is associated a score and a rank (descending relative distance compared to other object entities). Note that the model automatically learned that “<em>Autobiography</em>” is far away from “<em>Fantasy</em>” compared to relative proximity of “<em>Fantasy</em>” and “<em>Science fiction</em>“. </p>
+<p><iframe style="width: 100%; height: 450px;" src="./Translating Embeddings TransE_files/transe_03_KG.html" width="300" height="150" frameborder="0"></iframe></p>
+</div></div></div>
+				</div><!-- .dslc-module -->
+		</div></div></div></div><input type="hidden" id="dslca-post-data-thumb" value="http://pyvandenbussche.info/wp-content/uploads/2017/08/transe.png"></div>
+	
+		</div>
+	</div><!-- #content -->
+
+	
+	<footer id="colophon" class="site-footer" role="contentinfo">
+		<div class="inner-footer">
+					<nav id="footer-navigation" class="footer-navigation" role="navigation">
+			<div class="menu-social-media-container"><ul id="footer-menu" class="menu"><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-16"><a href="https://twitter.com/pyvandenbussche">twitter</a></li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-23"><a href="https://www.linkedin.com/in/pyvandenbussche/">linkedin</a></li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-24"><a href="https://plus.google.com/u/0/+PierreYvesVandenbussche">google+</a></li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-28"><a href="https://github.com/pyvandenbussche">github</a></li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-30"><a href="https://www.slideshare.net/pyvandenbussche">slideshare</a></li>
+</ul></div>		</nav>
+	<a class="go-top"><i class="tora-icon dslc-icon-ei-arrow_triangle-up"></i></a>		<div class="site-info">
+			<a href="https://wordpress.org/">Powered by WordPress</a>
+			<span class="sep"> | </span>
+			Theme: <a href="http://theme.blue/themes/tora" rel="designer">Tora</a>		</div>
+			</div>
+	</footer><!-- #colophon -->
+</div><!-- #page --> 
+
+ <link rel="stylesheet" id="katex-css" href="./Translating Embeddings TransE_files/katex.min.css" type="text/css" media="all">
+<script type="text/javascript">
+/* <![CDATA[ */
+var mejsL10n = {"language":"en-GB","strings":{"Close":"Close","Fullscreen":"Fullscreen","Turn off Fullscreen":"Turn off Fullscreen","Go Fullscreen":"Go Fullscreen","Download File":"Download File","Download Video":"Download Video","Play":"Play","Pause":"Pause","Captions\/Subtitles":"Captions\/Subtitles","None":"None","Time Slider":"Time Slider","Skip back %1 seconds":"Skip back %1 seconds","Video Player":"Video Player","Audio Player":"Audio Player","Volume Slider":"Volume Slider","Mute Toggle":"Mute Toggle","Unmute":"Unmute","Mute":"Mute","Use Up\/Down Arrow keys to increase or decrease volume.":"Use Up\/Down Arrow keys to increase or decrease volume.","Use Left\/Right Arrow keys to advance one second, Up\/Down arrows to advance ten seconds.":"Use Left\/Right Arrow keys to advance one second, Up\/Down arrows to advance ten seconds."}};
+var _wpmejsSettings = {"pluginPath":"\/wp-includes\/js\/mediaelement\/"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="./Translating Embeddings TransE_files/mediaelement-and-player.min.js"></script>
+<script type="text/javascript" src="./Translating Embeddings TransE_files/wp-mediaelement.min.js"></script>
+<script type="text/javascript" src="./Translating Embeddings TransE_files/imagesloaded.min.js"></script>
+<script type="text/javascript" src="./Translating Embeddings TransE_files/masonry.min.js"></script>
+<script type="text/javascript" src="./Translating Embeddings TransE_files/jquery.masonry.min.js"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var DSLCAjax = {"ajaxurl":"http:\/\/pyvandenbussche.info\/wp-admin\/admin-ajax.php"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="./Translating Embeddings TransE_files/main.js"></script>
+<script type="text/javascript" src="./Translating Embeddings TransE_files/skip-link-focus-fix.js"></script>
+<script type="text/javascript" src="./Translating Embeddings TransE_files/scripts.js"></script>
+<script type="text/javascript" src="./Translating Embeddings TransE_files/main.min.js"></script>
+<!--[if lt IE 9]>
+<script type='text/javascript' src='http://pyvandenbussche.info/wp-content/themes/tora/js/html5.js?ver=4.8.7'></script>
+<![endif]-->
+<script type="text/javascript" src="./Translating Embeddings TransE_files/wp-embed.min.js"></script>
+<script type="text/javascript" src="./Translating Embeddings TransE_files/katex.min.js"></script>
+	<script>!function(){"use strict";var e=document.querySelectorAll(".wp-katex-eq");Array.prototype.forEach.call(e,function(e){var t={displayMode:"true"===e.getAttribute("data-display"),throwOnError:!1},r=document.createElement("span");try{katex.render(e.textContent,r,t)}catch(a){r.style.color="red",r.textContent=a.message}e.parentNode.replaceChild(r,e)})}();</script>
+	<div><br></div>
+
+
+</body></html>

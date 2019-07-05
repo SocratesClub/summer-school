@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<!-- saved from url=(0077)http://pyvandenbussche.info/wp-content/files/project/transE/transe_02_KG.html -->
+<html style="height: 100%; margin: 0px; padding: 0px;"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <title>TransE - 02 - Knowledge Graph</title>
+  <script src="./mathbox-bundle.min.js"></script>
+  <script src="./mathbox-player.js"></script>
+  
+  <link rel="stylesheet" href="./mathbox.css">
+  <link rel="stylesheet" href="./mathbox-player.css">
+  <link rel="stylesheet" href="./font-awesome.min.css">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+</head>
+<body style="height: 100%; margin: 0px; padding: 0px; position: relative;">
+  
+  <script>
+  function getVertex(index) {
+		return vertices[index].slice(0,3);
+	}
+	function getVertexLabel(index) {
+		return vertices[index][3];
+	}
+	
+	function getVector(index) {
+		return new THREE.Vector3(vertices[index][0], vertices[index][1], vertices[index][2]);
+	}
+	
+	function getMiddleVector(indexA,indexB) {
+		var vec = new THREE.Vector3()
+		vec.addVectors(getVector(indexA),getVector(indexB))
+		vec = vec.divideScalar(2)
+		return vec.toArray()
+	}
+	
+	function displayVertex(slide, index){
+		slide.array({
+		        width: 1,
+		        items: 1,
+		        channels: 3,
+		        live: false,
+		        data: vertices[index],
+		    })
+			.point({
+        		color: vertices[index][4],
+				size: 20,
+				zIndex: 2
+      		}).step({
+	            script: {
+	              0: {props: {color: vertices[index][4]}},
+	              1: {props: {color: vertices[index][5][1]?vertices[index][4]:0xDCDCDC }},
+	              2: {props: {color: vertices[index][5][2]?vertices[index][4]:0xDCDCDC }},
+	              3: {props: {color: vertices[index][5][3]?vertices[index][4]:0xDCDCDC }},
+	              4: {props: {color: vertices[index][5][4]?vertices[index][4]:0xDCDCDC }},
+	          	}
+	     	})
+      		.text({
+				font: 'Helvetica',
+				style: 'bold',
+				live: false,
+				data: [vertices[index][3]]
+			})
+			.label({
+				snap: false,
+				color: vertices[index][4],
+				outline: 2,
+				size: 14,
+				offset: [0, -32],
+				depth: 0.5,
+				zIndex: 1
+			}).step({
+	            script: {
+	              0: {props: {color: vertices[index][4]}},
+	              1: {props: {color: vertices[index][5][1]?vertices[index][4]:0xDCDCDC }},
+	              2: {props: {color: vertices[index][5][2]?vertices[index][4]:0xDCDCDC }},
+	              3: {props: {color: vertices[index][5][3]?vertices[index][4]:0xDCDCDC }},
+	              4: {props: {color: vertices[index][5][4]?vertices[index][4]:0xDCDCDC }},
+	          	}
+	     	})
+	}
+	
+	function displayEdge(slide, index){
+		var edge = edges[index]
+		slide.array({
+			width: 3,
+			items: 1,
+			channels: 3,
+			data: [getVertex(edge[0]),getMiddleVector(edge[0],edge[1]),getVertex(edge[1])],
+			live: false
+		}).line({
+			width: 5,
+			end : true,
+			}).step({
+	            script: {
+	              0: {props: {color: edge[3]}},
+	              1: {props: {color: edge[4][1]?edge[3]:0xDCDCDC }},
+	              2: {props: {color: edge[4][2]?edge[3]:0xDCDCDC }},
+	              3: {props: {color: edge[4][3]?edge[3]:0xDCDCDC }},
+	              4: {props: {color: edge[4][4]?edge[3]:0xDCDCDC }},
+	          	}
+	     	}).slice({width: [1,2]})
+		.format({
+			data: [edge[2]]
+		})
+		.label({
+			snap: true,
+			outline: 2,
+			color: 0x383838,
+			size: 12,
+			depth: 0.5,
+			zIndex: 1
+		}).step({
+	            script: {
+	              0: {props: {color: 0x383838}},
+	              1: {props: {color: edge[4][1]?0x383838:0xC0C0C0 }},
+	              2: {props: {color: edge[4][2]?0x383838:0xC0C0C0 }},
+	              3: {props: {color: edge[4][3]?0x383838:0xC0C0C0 }},
+	              4: {props: {color: edge[4][4]?0x383838:0xC0C0C0 }},
+	          	}
+	     	})
+	}
+	
+	function displayLPEdge(slide, index){
+		var edge = lp_edges[index]
+		slide.array({
+			width: 3,
+			items: 1,
+			channels: 3,
+			data: [getVertex(edge[0]),getMiddleVector(edge[0],edge[1]),getVertex(edge[1])],
+			live: false
+		}).line({
+			width: 5,
+			end : true,
+			stroke : "dashed",
+			color: 0xDC143C,
+          }).slice({width: [1,2]})
+		.format({
+			data: [edge[2]]
+		})
+		.label({
+			snap: true,
+			outline: 2,
+			color: 0xDC143C,
+			size: 12,
+			depth: 0.5,
+			zIndex: 1
+		})
+	}
+	
+  	var mathbox = mathBox({ //element: document.querySelector('#vid-02'),
+      plugins: ['core'],//'cursor','controls'],
+      //controls: {klass: THREE.OrbitControls,},
+    });
+    var three = mathbox.three;
+	three.renderer.setClearColor(new THREE.Color(0xFFFFFF), 1.0);
+
+    /*if (window == top)
+      window.onkeydown = function (e) {
+        switch (e.keyCode) {
+          case 37:
+          case 38:
+            present.set('index', present.get('index') - 1);
+            break;
+          case 39:
+          case 40:
+            present.set('index', present.get('index') + 1);
+            break;
+        }
+      }*/
+
+
+    var view = mathbox.cartesian({
+      range: [[-1, 1], [-1, 1], [-1, 1]],
+      scale: [1, 1, 1],
+    })
+    
+    var present = view.present({index: 1})
+    
+    var camera = view.camera({
+      lookAt: [0, 0, 0],
+      proxy:true,
+       position: [0, 0, 1.45]
+    });
+    /*present.grid({
+              axes: [1, 2],
+              width: 2,
+              color: 0xb0b0b0,
+              depth: .5
+            })*/
+            
+    var color_person = 0x034f84
+    var color_genre = 0x1B7712
+    
+    var color_relInfluence = 0x3090ff
+    var color_relGenre = 0x57C74D
+    	var color_relPred = 0xDC143C
+            
+	var vertices = [
+    [.05,0,0,"J.K. Rowling",color_person,{0:true, 1:true, 2:true, 3:true, 4:true}],
+    	[.8,0,0,"C.S. Lewis",color_person,{0:true, 1:false, 2:false, 3:true, 4:false}],
+    	[0.3,.3,0, "Fantasy", color_genre,{0:true, 1:false, 2:false, 3:true, 4:true}],
+    	[0.135,.8,0, "J.R.R Tolkien", color_person,{0:true, 1:true, 2:false, 3:true, 4:false}],
+    	[-.1,-.3,0, "Tragicomedy",color_genre,{0:true, 1:false, 2:false, 3:false, 4:false}],
+    	[0.4,-.5,0, "Lloyd Alexander", color_person,{0:true, 1:false, 2:false, 3:false, 4:false}],
+    	[-.6,.2,0, "Stephen King", color_person,{0:true, 1:false, 2:false, 3:false, 4:true}],
+    	[-.9,.6,0, "Science Fiction",color_genre,{0:true, 1:true, 2:false, 3:false, 4:true}],
+    	[-.8,-.6,0, "Alan Poe", color_person,{0:true, 1:false, 2:false, 3:false, 4:false}],
+    ]; //each concept will be listed here once
+        
+    var edges = [
+    	[0,1,"isInfluencedBy", color_relInfluence,{0:true, 1:false, 2:false, 3:true, 4:false}],
+    	[0,2,"genre", color_relGenre,{0:true, 1:false, 2:false, 3:true, 4:true}],
+    	[1,2,"genre", color_relGenre,{0:true, 1:false, 2:false, 3:true, 4:false}],
+    	[1,3,"isInfluencedBy", color_relInfluence,{0:true, 1:false, 2:false, 3:true, 4:false}],
+    	[3,2,"genre", color_relGenre,{0:true, 1:false, 2:false, 3:true, 4:false}],
+    	[0,4,"genre", color_relGenre,{0:true, 1:false, 2:false, 3:false, 4:false}],
+    	[0,5,"isInfluencedBy", color_relInfluence,{0:true, 1:false, 2:false, 3:false, 4:false}],
+    	[0,6,"isInfluencedBy", color_relInfluence,{0:true, 1:false, 2:false, 3:false, 4:true}],
+    	[6,7,"genre", color_relGenre,{0:true, 1:false, 2:false, 3:false, 4:true}],
+    	[6,2,"genre", color_relGenre,{0:true, 1:false, 2:false, 3:false, 4:true}],
+    	[6,8,"isInfluencedBy", color_relInfluence,{0:true, 1:false, 2:false, 3:false, 4:false}],
+    ];
+    
+    var lp_edges = [
+    	[0,3,"isInfluencedBy?", color_relPred],
+    	[0,7,"genre?", color_relPred],
+    ];
+
+    var slide0 = present.slide({steps: 1})
+    for (var i=0; i < vertices.length; i++) displayVertex(slide0,i)
+	for (var i=0; i < edges.length; i++) displayEdge(slide0,i)
+	
+	var slide1 = slide0.slide().reveal({ duration: 1, stagger : vertices[1].slice(0,3)})
+		displayLPEdge(slide1,0)
+		displayLPEdge(slide1,1)
+	
+	var slide2 = slide0.slide()
+	var slide3 = slide0.slide().reveal({ duration: 1, stagger : vertices[1].slice(0,3)})
+		displayLPEdge(slide3,0)
+	var slide4 = slide0.slide().reveal({ duration: 1, stagger : vertices[1].slice(0,3)})
+		displayLPEdge(slide4,1)
+		
+	mathboxSlideAutoPlay(2500);
+	</script><div class="mathbox-overlays"></div><canvas width="1824" height="900" style="display: block; width: 912px; height: 450px; margin-left: 0px; margin-top: 0px; visibility: visible;"></canvas><div><div class="mathbox-loader mathbox-splash-mono mathbox-exit" style="display: none;">
+  <div class="mathbox-logo">
+    <div style="transform: rotateZ(628.879deg) rotateX(-448.191deg) rotateY(538.958deg);"> <div></div><div></div><div></div> </div>
+    <div style="transform: rotateZ(617.879deg) rotateX(-460.191deg) rotateY(523.958deg) scale3d(0.6, 0.6, 0.6);"> <div></div><div></div><div></div> </div>
+  </div>
+  <div class="mathbox-progress"><div style="width: 100%;"></div></div>
+</div></div>
+	
+    <div class="mathbox-slide-player-button-wrappers">
+      <a role="button" class="mathbox-slide-player-button icon-backward small" onclick="mathboxSlidePrevious()"></a>
+      <a role="button" class="mathbox-slide-player-button mathbox-slide-player-place-pause-button icon-pause" onclick="mathboxSlideAutoPlay()" ondblclick="mathboxSlideReset()">
+      	<span class="mathbox-slide-player-button-number">5/5</span>
+      </a>
+      <a role="button" class="mathbox-slide-player-button icon-forward small" onclick="mathboxSlideNext()"></a>
+    </div>
+
+
+</body></html>

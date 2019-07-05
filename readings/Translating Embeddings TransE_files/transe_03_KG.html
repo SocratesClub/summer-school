@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<!-- saved from url=(0077)http://pyvandenbussche.info/wp-content/files/project/transE/transe_03_KG.html -->
+<html style="height: 100%; margin: 0px; padding: 0px;"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <title>TransE - 03 - Knowledge Graph</title>
+  <script src="./mathbox-bundle.min.js"></script>
+  <script src="./mathbox-player.js"></script>
+  
+  <link rel="stylesheet" href="./mathbox.css">
+  <link rel="stylesheet" href="./mathbox-player.css">
+  <link rel="stylesheet" href="./font-awesome.min.css">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+</head>
+<body style="height: 100%; margin: 0px; padding: 0px; position: relative; cursor: move;">
+	<script>
+	
+	function getVec(matrix, i,j) {
+		return new THREE.Vector3(matrix[i][j][0], matrix[i][j][1], matrix[i][j][2]);
+	}
+	
+  	var displayStep = function(slide, dataIndex){
+  		slidechild = slide.slide({steps: 2})
+  		.array({
+      	  width:1,
+      	  items:1,
+      	  live: false,
+	      channels: 3,
+	      data: [0,0,0],
+	    }).text({
+			font: 'Helvetica',
+			style: 'bold',
+			// expr: function (emit, i) { emit('HELLO') }
+			data: ['Epoch #' + epochs[dataIndex+1]],
+		})
+		.label({
+			snap: false,
+			outline: 2,
+			size: 16,
+			depth: 0.5,
+			zIndex: 1
+		})
+      	.array({
+      	  width:entities.length,
+      	  items:2,
+	      channels: 3,
+	      live: false,
+	      expr: function (emit, i) {
+	        emit(entities[i][dataIndex][0],entities[i][dataIndex][1],entities[i][dataIndex][2]);
+	        emit(entities[i][dataIndex+1][0],entities[i][dataIndex+1][1],entities[i][dataIndex+1][2]);
+	      },
+	    }).grow({
+        items: 'first'
+      })
+      .step({
+        trigger:0,
+        pace: .3,
+        script: {
+        0: {props: {scale: 0}},
+        1: {props: {scale: 1}},
+        2: {props: {scale: 1}},
+        3: {props: {scale: 1}},
+        4: {props: {scale: 0}}
+        }
+      })
+      // Draw second point only
+      .slice({
+        items: [1, 2]
+      })
+      .point({
+        colors:'#points_colors',
+        color: '#ffffff',//entities_meta.map(function(item){return [item[1]];}),
+		size: 20,
+		zIndex: 2
+      }).text({
+			font: 'Helvetica',
+			style: 'bold',
+			width:  20,
+			height: 5,
+			expr: function (emit, i) {
+				if(entities_meta.length>i){emit(entities_meta[i][0]);}}
+		})
+		.label({
+			snap: false,
+			outline: 2,
+			colors:'#points_colors',
+        	color: '#ffffff',
+			size: 12,
+			offset: [0, -32],
+			depth: 0.5,
+			zIndex: 1
+		})
+		slidechild.slide().array({
+			width: 2,
+			items: 1,
+			channels: 3,
+			live: false,
+			expr: function (emit, i) {
+			    var j = 3
+		        emit(entities[j][dataIndex+1][0],entities[j][dataIndex+1][1],entities[j][dataIndex+1][2]);
+		        var vec = new THREE.Vector3()
+				vec.addVectors(getVec(entities,j,dataIndex+1),getVec(relations,0,dataIndex+1))
+				vecArray = vec.toArray()
+		        emit(vecArray[0],vecArray[1],vecArray[2]);
+		      },
+		}).line({
+			width: 5,
+			color: 0x57C74D,
+			end : true,
+			})  	
+  	}
+	
+  	var mathbox = mathBox({ //element: document.querySelector('#vid-01'),
+      plugins: ['core','cursor','controls'],//'cursor','controls'],
+      controls: {klass: THREE.OrbitControls,},
+      //controls: {klass: THREE.OrbitControls,},
+    });
+    var three = mathbox.three;
+	three.renderer.setClearColor(new THREE.Color(0xFFFFFF), 1.0);
+
+    /*if (window == top)
+      window.onkeydown = function (e) {
+        switch (e.keyCode) {
+          case 37:
+          case 38:
+            present.set('index', present.get('index') - 1);
+            break;
+          case 39:
+          case 40:
+            present.set('index', present.get('index') + 1);
+            break;
+        }
+      }*/
+
+
+    var view = mathbox.cartesian({
+      range: [[-.5, .5], [-.5, .5], [-.5, .5]],
+      scale: [1, 1, 1],
+    })
+    
+    var present = view.present({index: 1})
+    
+    /*var camera = view.camera({
+      lookAt: [0, 0, 0],
+      proxy:true,
+      position: [1, 1, 2.5]
+    });*/
+    var camera = view.camera({
+      lookAt: [0, 0, 0],
+      proxy: true,
+    }, {
+      position: function (t) { 
+      	if(interval) return [2 * Math.cos(t), .2 + .2 * Math.cos(t * .381), -2 * Math.sin(t)] 
+      	else return [.5, .2, 1.5]
+      },
+    },
+    {proxy: true});
+    
+    present.transform({
+              position: [0, 0, -.5]
+            }).grid({
+              axes: [1, 2],
+              width: 2,
+              color: 0xb0b0b0,
+              depth: .5
+            })
+    present.transform({
+              position: [-.5, 0, 0]
+            }).grid({
+              axes: [2, 3],
+              width: 2,
+              color: 0xb0b0b0,
+              depth: .5
+            })
+    present.transform({
+              position: [0, -.5, 0]
+            }).grid({
+              axes: [1, 3],
+              width: 2,
+              color: 0xb0b0b0,
+              depth: .5
+            })
+            
+            
+            
+            var epochs = [0, 40, 80, 120, 160, 200]
+var entities_meta = [['Horror', 'genre'],
+ ['Mystery fiction', 'genre'],
+ ['Fantasy', 'genre'],
+ ['J. K. Rowling', 'person'],
+ ['Science fiction', 'genre'],
+ ['Autobiography', 'genre']]
+var entities = [[[-0.012372418055622286, -0.0090793674981832981, -0.006361072358071619],
+  [-0.036109509387437802, -0.17875050253713995, -0.076603896203493588],
+  [0.15351114919234776, -0.22138029107740542, -0.070616444154687583],
+  [-0.0098121894210158427, -0.18685995137027572, -0.11793015083365818],
+  [0.10067049079989454, -0.18144849584175812, -0.05600429240705676],
+  [0.033780898392761535, -0.25154299981284045, -0.021039143123037979]],
+ [[-0.0061623550909790832, -0.021711661757261344, -0.037221245876630955],
+  [0.13992222492367512, -0.21014171755737743, 0.031469493731035747],
+  [0.12065832255245804, -0.15039093386294769, 0.010953142088482998],
+  [0.098096458112956128, -0.21501167489382117, -0.054486843628868672],
+  [0.055082757556196016, -0.15159167408778029, -0.080474873033005032],
+  [0.11486627563342457, -0.19650901224339644, -0.065434518828058175]],
+ [[0.013402472029649485, -0.014757392354216846, -0.025080192334773568],
+  [0.035675508577325016, -0.22727493497233267, -0.13829266235622653],
+  [0.027550856993108219, -0.355385319511344, -0.10559606058656376],
+  [0.19391694103477042, -0.19753080462401224, -0.16545169814157235],
+  [0.18056928229763775, -0.2512234900099502, -0.10154007958843606],
+  [0.181117785346412267, -0.29070104059809027, -0.12387081554532275]],
+ [[0.00048812411652818591, -0.012263666600609794, -0.029177036969740614],
+  [0.0052141802006648377, -0.091022039553161488, 0.29129046607024778],
+  [0.045832821147135785, -0.076443297805639271, 0.3321343703396909],
+  [0.09186904467044095, -0.023753655562116505, 0.20556254108388478],
+  [0.087263045631049627, -0.12701557756457971, 0.23348884848574175],
+  [0.01478148038873401, -0.036034271386342548, 0.30559588463867726]],
+ [[0.0065735248402283945, -0.023203524486019395, -0.020712043457703829],
+  [0.21888051757247684, -0.21127144524920646, -0.084485791988340761],
+  [0.25738248466595209, -0.31987883979572374, -0.20747939666851248],
+  [0.23667803118866243, -0.31695627720316255, -0.064261686589090455],
+  [0.1848016332096914, -0.25446963562379216, -0.14469308100019793],
+  [0.20397330282717968, -0.2800536890742773, -0.092860402739658454]],
+ [[-0.0052892643249923552, 0.018754664784340288, -0.0032684963378573472],
+  [0.26066095842054177, 0.28314989916099398, 0.043450552687169311],
+  [0.23581867267183454, 0.23270125018384241, -0.006599435448672801],
+  [0.18421852425182272, 0.14723428261502616, 0.094523890661154797],
+  [0.1955599900243713, 0.12723607921290267, -0.039969568781635934],
+  [0.30716874004985817, 0.059562938411993588, 0.053516518365117713]]]
+var relations_meta = [['Genre', 'Genre']]
+var relations = [[[-0.045553675981786453, -0.0039814898000925438, 0.0030206500089794619],
+  [0.098515709487412284, -0.24333232285827623, -0.29355642705228269],
+  [0.10394623775833389, -0.26824514724701727, -0.29929008406045943],
+  [0.093102627491755824, -0.30890814680595097, -0.28853106562817232],
+  [0.091891770765659834, -0.12709446239747086, -0.28706115723813411],
+  [0.131891770765659834, -0.25709446239747086, -0.38706115723813411]]]
+               
+    
+    var color_relInfluence = '3090ff'
+    var color_relGenre = 0x57C74D
+          
+    
+      
+    present.matrix({
+      id: 'points_colors',
+      width: entities_meta.length,
+      channels: 4,
+      data: entities_meta.map(function(item){return hexToRgb(item[1]);})
+      //data: [[0x03/255, 0x4f/255, 0x84/255,1],[0x1B/255, 0x77/255, 0x12/255, 1],[0x1B/255, 0x77/255, 0x12/255, 1],[0x03/255, 0x4f/255, 0x84/255,1],[0x03/255, 0x4f/255, 0x84/255,1]]//entities_meta.map(function(item){return [item[1]];}),
+    });
+    
+    function hexToRgb(type) {
+	  var hex = 'b0b0b0' // default color
+	  //assign hexa colors to each type
+	  if(type=='person') hex= '034f84'
+	  if(type=='genre') hex= '1B7712'
+	  
+	  var arrBuff = new ArrayBuffer(4);
+	  var vw = new DataView(arrBuff);
+	  vw.setUint32(0,parseInt(hex, 16),false);
+	  var arrByte = new Uint8Array(arrBuff);
+	  return [arrByte[1]/255 , arrByte[2]/255 , arrByte[3]/255, 1];
+	}
+
+    var slide0 = present.slide()
+    // iterate on the number of states/snapchots
+    for (var i=0; i < entities[0].length-1; i++){
+    	displayStep(slide0,i)
+    }
+    
+    //console.log(entities_meta.map(function(item){return [item[1]];}))
+	mathboxSlideAutoPlay(800);
+	</script><div class="mathbox-overlays"></div><canvas width="1824" height="900" style="display: block; width: 912px; height: 450px; margin-left: 0px; margin-top: 0px; visibility: visible;"></canvas><div><div class="mathbox-loader mathbox-splash-mono mathbox-exit" style="display: none;">
+  <div class="mathbox-logo">
+    <div style="transform: rotateZ(536.521deg) rotateX(-212.65deg) rotateY(147.992deg);"> <div></div><div></div><div></div> </div>
+    <div style="transform: rotateZ(525.521deg) rotateX(-224.65deg) rotateY(132.992deg) scale3d(0.6, 0.6, 0.6);"> <div></div><div></div><div></div> </div>
+  </div>
+  <div class="mathbox-progress"><div style="width: 100%;"></div></div>
+</div></div>
+	
+    <div class="mathbox-slide-player-button-wrappers">
+      <a role="button" class="mathbox-slide-player-button icon-backward small" onclick="mathboxSlidePrevious()"></a>
+      <a role="button" class="mathbox-slide-player-button mathbox-slide-player-place-pause-button icon-pause" onclick="mathboxSlideAutoPlay()" ondblclick="mathboxSlideReset()">
+      	<span class="mathbox-slide-player-button-number">15/16</span>
+      </a>
+      <a role="button" class="mathbox-slide-player-button icon-forward small" onclick="mathboxSlideNext()"></a>
+    </div>
+
+
+</body></html>

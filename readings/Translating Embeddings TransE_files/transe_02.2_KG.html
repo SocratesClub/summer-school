@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<!-- saved from url=(0079)http://pyvandenbussche.info/wp-content/files/project/transE/transe_02.2_KG.html -->
+<html style="height: 100%; margin: 0px; padding: 0px;"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <title>TransE - 01 - Knowledge Graph</title>
+  <script src="./mathbox-bundle.min.js"></script>
+  <script src="./mathbox-player.js"></script>
+  
+  <link rel="stylesheet" href="./mathbox.css">
+  <link rel="stylesheet" href="./mathbox-player.css">
+  <link rel="stylesheet" href="./font-awesome.min.css">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+</head>
+<body style="height: 100%; margin: 0px; padding: 0px; position: relative;">
+	<script>
+	function getVector(index) {
+		return new THREE.Vector3(entities[index][0][0], entities[index][0][1], entities[index][0][2]);
+	}
+	
+	function getMiddleVector(coordA,coordB) {
+		var vec = new THREE.Vector3()
+		var vecA = new THREE.Vector3(coordA[0],coordA[1],coordA[2]);
+		var vecB = new THREE.Vector3(coordB[0],coordB[1],coordB[2]);
+		vec.addVectors(vecA,vecB)
+		vec = vec.divideScalar(2)
+		return vec.toArray()
+	}
+	
+	function displayVertices(slide){
+		slide.array({
+			width:entities.length,
+			items:1,
+			channels: 3,
+			live: false,
+			expr: function (emit, i) {
+				emit(entities[i][0][0],entities[i][0][1],entities[i][0][2]);
+			},
+		})
+		.point({
+			colors:'#points_colors',
+			color: '#ffffff',
+			size: 20,
+			zIndex: 2
+		}).text({
+			font: 'Helvetica',
+			style: 'bold',
+			width:  20,
+			height: 5,
+			live:false,
+			expr: function (emit, i) {
+				if(entities_meta.length>i){emit(entities_meta[i][0]);}}
+		})
+		.label({
+			snap: false,
+			outline: 2,
+			colors:'#points_colors',
+        	color: '#ffffff',
+			size: 12,
+			offset: [0, -32],
+			depth: 0.5,
+			zIndex: 1
+		})
+	}
+	
+	function displayLPEdge(slide, edgeStart, edgeEnd, edgeLabel){
+		slide.array({
+			width: 3,
+			items: 1,
+			channels: 3,
+			data: [edgeStart,getMiddleVector(edgeStart,edgeEnd),edgeEnd],
+			live: false
+		}).line({
+			width: 5,
+			color: 0xDC143C,
+			end : true,
+      stroke : "dashed",
+			}).slice({width: [1,2]})
+		.format({
+			data: [edgeLabel],
+      style: 'bold',
+		})
+		.label({
+			snap: true,
+			outline: 2,
+			color: 0xDC143C,
+			size: 18,
+			depth: 0.5,
+			zIndex: 1
+		})
+	}
+  
+  function displayEdge(slide, edgeStart, edgeEnd, edgeLabel, edgeColor){
+		slide.array({
+			width: 3,
+			items: 1,
+			channels: 3,
+			data: [edgeStart,getMiddleVector(edgeStart,edgeEnd),edgeEnd],
+			live: false
+		}).line({
+			width: 5,
+			color: edgeColor,
+			end : true,
+			}).slice({width: [1,2]})
+		.format({
+			data: [edgeLabel],
+      style: 'bold',
+		})
+		.label({
+			snap: true,
+			outline: 2,
+			color: edgeColor,
+			size: 18,
+			depth: 0.5,
+			zIndex: 1
+		})
+	}
+ 
+	
+	var displayStep = function(slide, dataIndex){
+  		slidechild = slide.slide({steps: 2})
+  		.array({
+      	  width:2,
+      	  items:2,
+	      channels: 3,
+	      live: false,
+	      expr: function (emit, i) {
+	        emit(entities[i][dataIndex][0],entities[i][dataIndex][1],entities[i][dataIndex][2]);
+	        emit(entities[i][dataIndex+1][0],entities[i][dataIndex+1][1],entities[i][dataIndex+1][2]);
+	      },
+	    }).grow({
+        items: 'first'
+      })
+      .step({
+        trigger:0,
+        pace: .3,
+        script: {
+        0: {props: {scale: 0}},
+        1: {props: {scale: 1}},
+        2: {props: {scale: 1}},
+        3: {props: {scale: 1}},
+        4: {props: {scale: 0}}
+        }
+      })
+      // Draw second point only
+      .slice({
+        items: [1, 2]
+      })
+      .point({
+        colors:'#points_colors',
+        color: '#ffffff',
+		size: 20,
+		zIndex: 2
+      }).text({
+			font: 'Helvetica',
+			style: 'bold',
+			width:  20,
+			height: 5,
+			live: false,
+			expr: function (emit, i) {
+				if(entities_meta.length>i){emit(entities_meta[i][0]);}}
+		})
+		.label({
+			snap: false,
+			outline: 2,
+			colors:'#points_colors',
+        	color: '#ffffff',
+			size: 12,
+			offset: [0, -32],
+			depth: 0.5,
+			zIndex: 1
+		})	
+		return slidechild;
+  	}
+    
+    
+    var displayPoints = function(slide){
+      slide.array({
+      	width:entities.length,
+	      channels: 3,
+	      live: false,
+	      expr: function (emit, i) {
+	        emit(entities[i][0][0],entities[i][0][1],entities[i][0][2]);
+	      },
+	    })
+      .point({
+        colors:'#points_colors',
+        color: '#ffffff',
+      size: 20,
+      zIndex: 2
+      }).text({
+			font: 'Helvetica',
+			style: 'bold',
+			width:  20,
+			height: 5,
+			live: false,
+			expr: function (emit, i) {
+				if(entities_meta.length>i){emit(entities_meta[i][0]);}}
+      })
+		.label({
+			snap: false,
+			outline: 2,
+			colors:'#points_colors',
+        	color: '#ffffff',
+			size: 12,
+			offset: [0, -32],
+			depth: 0.5,
+			zIndex: 1
+		})
+  	}
+    var displayPoint = function(slide, coord, label,color){
+      slide.array({
+      	width:1,
+	      channels: 3,
+	      live: false,
+	      data: coord,
+	    })
+      .point({
+        color: color,
+        size: 21,
+        zIndex: 2
+      }).text({
+        font: 'Helvetica',
+        style: 'bold',
+        width:  20,
+        height: 5,
+        live: false,
+        expr: function (emit, i) {
+          emit(label);}
+      })
+		.label({
+			snap: false,
+			outline: 2,
+      color: color,
+			size: 12,
+			offset: [0, -32],
+			depth: 0.5,
+			zIndex: 1
+		})
+  	}
+  	
+  	
+    
+    function hexToRgb(type) {
+	  var hex = 'b0b0b0' // default color
+	  //assign hexa colors to each type
+	  if(type=='person') hex= '034f84'
+	  if(type=='genre') hex= '1B7712'
+	  if(type=='isInfluencedBy') hex= '3090ff'
+	  if(type=='genre') hex= '1B7712'  
+	  
+	  var arrBuff = new ArrayBuffer(4);
+	  var vw = new DataView(arrBuff);
+	  vw.setUint32(0,parseInt(hex, 16),false);
+	  var arrByte = new Uint8Array(arrBuff);
+	  return [arrByte[1]/255 , arrByte[2]/255 , arrByte[3]/255, 1];
+	}
+	
+  	var mathbox = mathBox({ //element: document.querySelector('#vid-01'),
+      plugins: ['core'],//'cursor','controls'],
+      //controls: {klass: THREE.OrbitControls,},
+      /*loop: {
+        start: window == window.top,
+      },*/
+    });
+    var three = mathbox.three;
+	three.renderer.setClearColor(new THREE.Color(0xFFFFFF), 1.0);
+
+    /*if (window == top)
+      window.onkeydown = function (e) {
+        switch (e.keyCode) {
+          case 37:
+          case 38:
+            present.set('index', present.get('index') - 1);
+            break;
+          case 39:
+          case 40:
+            present.set('index', present.get('index') + 1);
+            break;
+        }
+      }*/
+
+    
+    var view = mathbox.cartesian({
+      range: [[-1, 1], [-1, 1], [-1, 1]],
+      scale: [1, 1, 1],
+    })
+    
+    var present = view.present({index: 1})
+    
+    var camera = view.camera({
+      lookAt: [.3, .1, 0],
+      proxy:true,
+       position: [.3, .1, 1]
+    });
+            
+    var color_person = 0x034f84
+    var color_genre = 0x1B7712
+    
+    var color_relInfluence = 0x3090ff
+    var color_relGenre = 0x57C74D
+            
+	/*var vertices = [
+    	[-1,0,0,"J.K. Rowling",color_person],
+    	[-.2,0,0,"C.S. Lewis",color_person],
+    	[-.7,.3,0, "Fantasy", color_genre],
+    ]; */
+    var entities_meta = [
+	 ['Lloyd Alexander', 'person'],
+	 ['Fantasy', 'genre'],
+   ['Horror', 'genre']]
+    var edges = [
+    	[0,1,"isInfluencedBy", color_relInfluence],
+    	[0,2,"genre", color_relGenre],
+    	[1,2,"genre", color_relGenre],
+    ];    
+    var relations_meta = [
+    	[0,1,'isInfluencedBy'],
+    	[0,2,'genre'],
+    	[1,2,'genre'],
+    ]
+	var relations = [
+		[[.6,.5,0],[.8,.45,0],[.85,.50,0]],
+		[[1.05, .35, 0],[1,.5,0],[.9,.45,0]]
+		]
+    var entities = [
+    	[[-.45,-.05,0],[.35,.2,0]],
+    	[[-.25,.4,0],[.8,.2,0]],
+      [[0,.1,0],[.8,.05,0]],
+    ];
+
+
+	present.matrix({
+      id: 'points_colors',
+      width: entities_meta.length,
+      channels: 4,
+      data: entities_meta.map(function(item){return hexToRgb(item[1]);})
+    });
+    present.matrix({
+      id: 'edges_colors',
+      width: relations_meta.length,
+      channels: 4,
+      data: relations_meta.map(function(item){return hexToRgb(item[2]);})
+    });
+	    
+			
+	// Display grid
+	var slide0 = present.slide()
+  slide0.transform({position: [-.6, -.2, 0]}).axis({
+	  axis: 'x',
+	  size: 5,
+	  range: [0,.8]
+	}).axis({
+	  axis: 'y',
+	  size: 5,
+	  range: [0,.8]
+	}).grid({
+		axes: [1, 2],
+		rangeX: [0,.8],
+		rangeY: [0,.8],
+		width: 2,
+		color: 0xb0b0b0,
+		depth: .5
+	})
+  
+  // Head + Link  = Tail
+  slide01 = slide0.slide().reveal({ duration: .5, stagger : [5,0,0]})
+  displayPoints(slide01)
+  
+  // Display Prediction edge
+  slide02 = slide01.slide().reveal({ duration: .2, stagger : [5,0,0]})
+  displayLPEdge(slide02,entities[0][0],[-.2,.3,0],"genre")
+  
+  slide03 = slide02.slide().reveal({ duration: .2})
+  displayPoint(slide03,entities[1][0],entities_meta[1][0],0xDC143C)
+  
+  
+  // Dispay step translation to graph
+  var slide003 = displayStep(slide03,0)
+  slide004 = slide003.slide({early:1}).reveal({ duration: .2, stagger : [5,0,0]})
+  displayEdge(slide004,entities[0][1],entities[1][1],"genre",color_relGenre)
+  
+	
+	mathboxSlideAutoPlay(2000);
+	</script><div class="mathbox-overlays"></div><canvas width="1824" height="900" style="display: block; width: 912px; height: 450px; margin-left: 0px; margin-top: 0px; visibility: visible;"></canvas><div><div class="mathbox-loader mathbox-splash-mono mathbox-exit" style="display: none;">
+  <div class="mathbox-logo">
+    <div style="transform: rotateZ(-175.225deg) rotateX(169.105deg) rotateY(-240.464deg);"> <div></div><div></div><div></div> </div>
+    <div style="transform: rotateZ(-186.225deg) rotateX(157.105deg) rotateY(-255.464deg) scale3d(0.6, 0.6, 0.6);"> <div></div><div></div><div></div> </div>
+  </div>
+  <div class="mathbox-progress"><div style="width: 100%;"></div></div>
+</div></div>
+	
+	<div class="mathbox-slide-player-button-wrappers">
+      <a role="button" class="mathbox-slide-player-button icon-backward small" onclick="mathboxSlidePrevious()"></a>
+      <a role="button" class="mathbox-slide-player-button mathbox-slide-player-place-pause-button icon-pause" onclick="mathboxSlideAutoPlay()" ondblclick="mathboxSlideReset()">
+      	<span class="mathbox-slide-player-button-number">4/7</span>
+      </a>
+      <a role="button" class="mathbox-slide-player-button icon-forward small" onclick="mathboxSlideNext()"></a>
+    </div>
+
+
+</body></html>
