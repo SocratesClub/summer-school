@@ -2,6 +2,10 @@
 
 计算社会科学论文工作坊(2019.07.01-07.06)，主要介绍了神经网络基础、CNN、RNN、transE等神经网络模型以及在word embeddings方面的简单应用，课程涉及到的Python代码和论文见以下链接 https://github.com/computational-class/summer-school/releases
 
+- 主讲人: 吴令飞
+- 主持人：王成军
+- 助教：章彦博、贾小双、崔浩川、徐绘敏、李铁薇、吴友钦
+
 ## 20190701
 
 1. [Understanding neural networks with Pytorch](https://nbviewer.jupyter.org/github/computational-class/summer-school/blob/master/class_01_chengjun.ipynb)
