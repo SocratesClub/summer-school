@@ -23,11 +23,14 @@
 ## 20190704
 1. CNN
 2. discussing the applications of deep learning methods & eci method of hidalgo's research.
-3. [HITS and ECI](https://nbviewer.jupyter.org/github/computational-class/summer-school/blob/master/class_04_hits.ipynb) 
+3. [HITS and ECI](https://nbviewer.jupyter.org/github/computational-class/summer-school/blob/master/class_04_hits.ipynb)
 
 ## 20190705
 1. transE
-2. RNN
+2. Readings afternoon
+
+## 20190706
+1. RNN
 
 
 
@@ -58,3 +61,6 @@
 
 ## day 5
 - Unsupervised word embeddings capture latent knowledge from materials science literature
+
+## day 6
+- [TRANSLATION WITH A SEQUENCE TO SEQUENCE NETWORK AND ATTENTION](https://pytorch.org/tutorials/intermediate/seq2seq_translation_tutorial.html)
